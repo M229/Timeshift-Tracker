@@ -6,6 +6,35 @@
 	<Page
 		id="page"
 		title="{i18n>title}">
-		<content></content>
+		<content>
+			<Table id="shipmentTable" items="{JSON_Data>/shipments}">
+				<headerToolbar>
+					<Toolbar>
+						<content>
+							<Title text="Shipments" level="H2"/>
+						</content>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column>
+						<Text text="Name"/>
+					</Column>
+					<Column>
+						<Text text="Surname"/>
+					</Column>
+					
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{JSON_Data>Name}"/>
+							<Text text="{JSON_Data>Surname}"/>
+						
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+
+		</content>
 	</Page>
 </mvc:View>
