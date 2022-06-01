@@ -24,6 +24,8 @@ sap.ui.define([
             return mResult;
         },
 
+        ////////////////////////////////////////////////////////////
+
         getById: function(sId) {
 			return this.getView().byId(sId) || sap.ui.getCore().byId(sId);
 		},
