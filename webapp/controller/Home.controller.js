@@ -1,15 +1,15 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
+	"./BaseController",
 	"../model/formatter"
-], function(Controller, formatter) {
+], function(BaseController, formatter) {
 	"use strict";
 
-	return Controller.extend("sap.ui.demo.basicTemplate.controller.App", {
+	return BaseController.extend("sap.ui.demo.basicTemplate.controller.App", {
 
 		formatter: formatter,
 
 		onInit: function () {
-
+			console.log(this.sum(2, 2));
 		}
 	});
 });
