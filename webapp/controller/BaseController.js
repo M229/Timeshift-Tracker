@@ -17,11 +17,31 @@ sap.ui.define([
             return firebase.firestore().collection(sCollection).get();
         },
 
-        getMapFromCollection: function(collection) {
-            let mResult = collection.docs.map((doc) => {
-                return doc.data();
+        getArrayFromCollection: function(collection) {
+            let aResult = collection.docs.map((doc) => {
+                let obj = doc.data();
+                obj.id = doc.id;
+                return obj
             });
-            return mResult;
+            return aResult;
+        },
+
+        dbRefreshModel: function(sModelName, sCollectionName) {
+            let oJSON_Data = this.getModel(sModelName);
+			this.getCollection(sCollectionName).then((collection) => {
+				let aData = this.getArrayFromCollection(collection);
+				oJSON_Data.setProperty("/" + sCollectionName, aData);
+			});
+        },
+
+        dbAddDoc: function(sCollection, oDoc) {
+            let collection = firebase.firestore().collection(sCollection);
+            return collection.add(oDoc);
+        },
+
+        dbDeleteDoc: function(sCollectionName, sDocId) {
+            let collection = firebase.firestore().collection(sCollectionName);
+			return collection.doc(sDocId).delete();
         },
 
         ////////////////////////////////////////////////////////////
