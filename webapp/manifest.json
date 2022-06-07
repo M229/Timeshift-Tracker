@@ -68,6 +68,10 @@
 			},
 			"JSON_Data": {
 				"type": "sap.ui.model.json.JSONModel"
+			},
+			"JSON_State": {
+				"type": "sap.ui.model.json.JSONModel",
+				"uri": "State.json"
 			}
 		},
 		"resources": {
@@ -90,6 +94,11 @@
 					"pattern": "",
 					"name": "home",
 					"target": ["home"]
+				},
+				{
+					"pattern": "Login",
+					"name": "Login",
+					"target": ["login"]
 				}
 			],
 			"targets": {
@@ -97,7 +106,13 @@
 					"name": "Home",
 					"id": "home",
 					"level": 1,
-					"title": "{i18n>title}"
+					"title": "{i18n>HomePageTitle}"
+				},
+				"login": {
+					"name": "Login",
+					"id": "Login",
+					"level": 1,
+					"title": "{i18n>LoginPageTitle}"
 				}
 			}
 		}

@@ -19,6 +19,7 @@
 
         <HBox justifyContent="Center" class="sapUiTinyMarginBottom">
             <Button type="Emphasized" text="Добавить" press="pressAddItemDialogAddBtn"></Button>
+            <Button type="Emphasized" text="Log In" press="pressAddItemDialogLogInBtn" class="sapUiTinyMarginBegin"></Button>
         </HBox>
     </Dialog>
 </core:FragmentDefinition>

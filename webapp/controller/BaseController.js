@@ -2,22 +2,22 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "../model/formatter",
     "sap/ui/model/json/JSONModel"
-], function(Controller, formatter, JSONModel) {
+], function (Controller, formatter, JSONModel) {
     "use strict";
-    
+
     return Controller.extend("sap.ui.demo.basicTemplate.controller.BaseController", {
 
         formatter: formatter,
 
-		onInit: function() {
+        onInit: function () {
 
         },
 
-        getCollection: function(sCollection) {
+        getCollection: function (sCollection) {
             return firebase.firestore().collection(sCollection).get();
         },
 
-        getArrayFromCollection: function(collection) {
+        getArrayFromCollection: function (collection) {
             let aResult = collection.docs.map((doc) => {
                 let obj = doc.data();
                 obj.id = doc.id;
@@ -26,36 +26,51 @@ sap.ui.define([
             return aResult;
         },
 
-        dbRefreshModel: function(sModelName, sCollectionName) {
+        dbRefreshDataModel: function (sModelName, aCollections) {
             let oJSON_Data = this.getModel(sModelName);
-			this.getCollection(sCollectionName).then((collection) => {
-				let aData = this.getArrayFromCollection(collection);
-				oJSON_Data.setProperty("/" + sCollectionName, aData);
-			});
+            aCollections.forEach((sCollectionName) => {
+                this.getCollection(sCollectionName).then((collection) => {
+                    let aData = this.getArrayFromCollection(collection);
+                    oJSON_Data.setProperty("/" + sCollectionName, aData);
+                });
+            });
         },
 
-        dbAddDoc: function(sCollection, oDoc) {
+        dbAddDoc: function (sCollection, oDoc) {
             let collection = firebase.firestore().collection(sCollection);
             return collection.add(oDoc);
         },
 
-        dbDeleteDoc: function(sCollectionName, sDocId) {
+        dbDeleteDoc: function (sCollectionName, sDocId) {
             let collection = firebase.firestore().collection(sCollectionName);
-			return collection.doc(sDocId).delete();
+            return collection.doc(sDocId).delete();
         },
 
-        ////////////////////////////////////////////////////////////
+        routerNavTo: function (sTargetId) {
+            let oRouter = this.getOwnerComponent().getRouter();
+            oRouter.navTo(sTargetId);
+        },
 
-        getById: function(sId) {
-			return this.getView().byId(sId) || sap.ui.getCore().byId(sId);
-		},
+        dbSignWithEmail: function (sEmail, sPass) {
+            return firebase.auth().signInWithEmailAndPassword(sEmail, sPass);
+        },
 
-		getModel: function(sName) {
-			return this.getView().getModel(sName) || this.getOwnerComponent().getModel(sName);
-		},
+        setUserData: function (oUser, sModelName) {
+            let oJSON_State = this.getView().getModel(sModelName);
+            let oUserLight = {
+                uid: oUser.uid,
+                email: oUser.email,
+                displayName: oUser.displayName
+            }
+            oJSON_State.setProperty("/user", oUserLight);
+        },
 
-		setModel: function(oModel, sName) {
-			return this.getView().setModel(oModel, sName);
-		},
+        getModel: function (sName) {
+            return this.getView().getModel(sName) || this.getOwnerComponent().getModel(sName);
+        },
+
+        setModel: function (oModel, sName) {
+            return this.getView().setModel(oModel, sName);
+        },
     });
 });

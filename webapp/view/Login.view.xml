@@ -1,0 +1,13 @@
+<mvc:View controllerName="sap.ui.demo.basicTemplate.controller.Login" displayBlock="true"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+	<Page id="pageLogin" title="{i18n>LoginPageTitle}">
+		<content>
+			<VBox justifyContent="Center" alignItems="Center" class="sapUiLargeMarginTop">
+                <Input id="LoginEmailInput" placeholder="Email"/>
+                <Input id="LoginPassInput" placeholder="Password"/>
+                <Button text="Log In" class="sapUiSmallMarginTop" press="pressLoginLogBtn"/>
+            </VBox>
+		</content>
+	</Page>
+</mvc:View>

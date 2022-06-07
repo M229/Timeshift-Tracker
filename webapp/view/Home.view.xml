@@ -1,14 +1,36 @@
 <mvc:View controllerName="sap.ui.demo.basicTemplate.controller.Home" displayBlock="true"
 	xmlns="sap.m"
-	xmlns:mvc="sap.ui.core.mvc">
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:unified="sap.ui.unified">
 	<Page id="page" title="{i18n>title}">
+		<headerContent>
+			<Label text="{JSON_State>/user/email}"/>
+		</headerContent>
 		<content>
 			<HBox>
 				<VBox justifyContent="End">
 					<Button icon="sap-icon://add" type="Transparent" press="pressHomePlusBtn"/>
+					<Button text="Выйти" icon="sap-icon://account" type="Transparent" press="pressHomeLogOutBtn"/>
 				</VBox>
 
 			</HBox>
+			<PlanningCalendar id="PC1" startDate="{path: '/startDate'}" rows="{path: '/people'}" appointmentsVisualization="Filled" appointmentSelect="handleAppointmentSelect" showEmptyIntervalHeaders="false" stickyHeader="true" showWeekNumbers="true">
+				<toolbarContent>
+					<Title text="Title" titleStyle="H4"/>
+				</toolbarContent>
+				<rows>
+					<PlanningCalendarRow icon="{pic}" title="{name}" text="{role}" appointments="{path : 'appointments', templateShareable: false}" intervalHeaders="{path: 'headers', templateShareable: false}">
+						<appointments>
+							<unified:CalendarAppointment startDate="{start}" endDate="{end}" icon="{pic}" title="{title}" text="{info}" type="{type}" tentative="{tentative}">
+							</unified:CalendarAppointment>
+						</appointments>
+						<intervalHeaders>
+							<unified:CalendarAppointment startDate="{start}" endDate="{end}" icon="{pic}" title="{title}" type="{type}">
+							</unified:CalendarAppointment>
+						</intervalHeaders>
+					</PlanningCalendarRow>
+				</rows>
+			</PlanningCalendar>
 			<Table id="myTable" items="{JSON_Data>/shipments}" mode="Delete" delete="pressTableCrossBtn">
 				<headerToolbar>
 					<Toolbar>
@@ -24,7 +46,6 @@
 					<Column>
 						<Text text="Surname"/>
 					</Column>
-
 				</columns>
 				<items>
 					<ColumnListItem>
