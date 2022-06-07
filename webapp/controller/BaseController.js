@@ -55,7 +55,8 @@ sap.ui.define([
             return firebase.auth().signInWithEmailAndPassword(sEmail, sPass);
         },
 
-        setUserData: function (oUser, sModelName) {
+        setUserData: function (oUser, sCollectionName, sModelName) {
+            let oCollection = this.getCollection(sCollectionName).then();
             let oJSON_State = this.getView().getModel(sModelName);
             let oUserLight = {
                 uid: oUser.uid,
@@ -65,12 +66,24 @@ sap.ui.define([
             oJSON_State.setProperty("/user", oUserLight);
         },
 
+        pcJSONGenerator: function (sCollectionName) {
+            // function pcHumanGenerator() {
+                
+            // };
+            this.getCollection(sCollectionName).then((collection) => {
+                let result = {};
+                result.startDate = new Date("2022", "6", "1", "0", "0");
+            });
+        },
+
+        ////////////////////////////
+
         getModel: function (sName) {
             return this.getView().getModel(sName) || this.getOwnerComponent().getModel(sName);
         },
 
         setModel: function (oModel, sName) {
             return this.getView().setModel(oModel, sName);
-        },
+        }
     });
 });
