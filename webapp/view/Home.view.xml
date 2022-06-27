@@ -14,13 +14,13 @@
 				</VBox>
 
 			</HBox>
-			<PlanningCalendar id="PC1" startDate="{path: '/startDate'}" rows="{path: '/people'}" appointmentsVisualization="Filled" appointmentSelect="handleAppointmentSelect" showEmptyIntervalHeaders="false" stickyHeader="true" showWeekNumbers="true">
+			<PlanningCalendar id="PC1" viewKey="Week" startDate="{path: '/startDate'}" rows="{path: '/people'}" appointmentsVisualization="Filled" appointmentSelect="handleAppointmentSelect" showEmptyIntervalHeaders="false" stickyHeader="false" showWeekNumbers="false">
 				<toolbarContent>
 					<Title text="Title" titleStyle="H4"/>
-				</toolbarContent>
+				</toolbarContent>	
 				<rows>
 					<PlanningCalendarRow icon="{pic}" title="{name}" text="{role}" appointments="{path : 'appointments', templateShareable: false}" intervalHeaders="{path: 'headers', templateShareable: false}">
-						<appointments>
+						 <appointments>
 							<unified:CalendarAppointment startDate="{start}" endDate="{end}" icon="{pic}" title="{title}" text="{info}" type="{type}" tentative="{tentative}">
 							</unified:CalendarAppointment>
 						</appointments>
@@ -31,31 +31,7 @@
 					</PlanningCalendarRow>
 				</rows>
 			</PlanningCalendar>
-			<Table id="myTable" items="{JSON_Data>/shipments}" mode="Delete" delete="pressTableCrossBtn">
-				<headerToolbar>
-					<Toolbar>
-						<content>
-							<Title text="Shipments" level="H2"/>
-						</content>
-					</Toolbar>
-				</headerToolbar>
-				<columns>
-					<Column>
-						<Text text="Name"/>
-					</Column>
-					<Column>
-						<Text text="Surname"/>
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem>
-						<cells>
-							<Text text="{JSON_Data>Name}"/>
-							<Text text="{JSON_Data>Surname}"/>
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
+			
 
 		</content>
 	</Page>

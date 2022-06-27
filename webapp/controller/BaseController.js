@@ -13,8 +13,8 @@ sap.ui.define([
 
         },
 
-        getCollection: function (sCollection) {
-            return firebase.firestore().collection(sCollection).get();
+        dbGetCollection: function (sCollectionName) {
+            return firebase.firestore().collection(sCollectionName);
         },
 
         getArrayFromCollection: function (collection) {
@@ -29,20 +29,20 @@ sap.ui.define([
         dbRefreshDataModel: function (sModelName, aCollections) {
             let oJSON_Data = this.getModel(sModelName);
             aCollections.forEach((sCollectionName) => {
-                this.getCollection(sCollectionName).then((collection) => {
+                this.dbGetCollection(sCollectionName).get().then((collection) => {
                     let aData = this.getArrayFromCollection(collection);
                     oJSON_Data.setProperty("/" + sCollectionName, aData);
                 });
             });
         },
 
-        dbAddDoc: function (sCollection, oDoc) {
-            let collection = firebase.firestore().collection(sCollection);
+        dbAddDoc: function (sCollectionName, oDoc) {
+            let collection = this.dbGetCollection(sCollectionName);
             return collection.add(oDoc);
         },
 
         dbDeleteDoc: function (sCollectionName, sDocId) {
-            let collection = firebase.firestore().collection(sCollectionName);
+            let collection = this.dbGetCollection(sCollectionName);
             return collection.doc(sDocId).delete();
         },
 
@@ -55,8 +55,7 @@ sap.ui.define([
             return firebase.auth().signInWithEmailAndPassword(sEmail, sPass);
         },
 
-        setUserData: function (oUser, sCollectionName, sModelName) {
-            let oCollection = this.getCollection(sCollectionName).then();
+        setCurrentUserData: function (oUser, sModelName) {
             let oJSON_State = this.getView().getModel(sModelName);
             let oUserLight = {
                 uid: oUser.uid,
@@ -66,11 +65,27 @@ sap.ui.define([
             oJSON_State.setProperty("/user", oUserLight);
         },
 
+        dbGetDocByUid: function (sCollection, sDocUid) {
+            let docRef = firebase.firestore().collection(sCollection).doc(sDocUid);
+            return docRef.get();
+        },
+
+        dbAddNewUser: function (sCollectionName, oUser) {
+            let collection = firebase.firestore().collection(sCollectionName);
+            collection.doc(oUser.uid).set({
+                description: "Team member",
+                displayName: "Anonymous",
+                pic: "sap-icon://employee",
+                uid: oUser.uid,
+                email: oUser.email
+            })
+        },
+
         pcJSONGenerator: function (sCollectionName) {
             // function pcHumanGenerator() {
-                
+
             // };
-            this.getCollection(sCollectionName).then((collection) => {
+            this.dbGetCollection(sCollectionName).then((collection) => {
                 let result = {};
                 result.startDate = new Date("2022", "6", "1", "0", "0");
             });

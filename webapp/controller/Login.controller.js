@@ -15,8 +15,17 @@ sap.ui.define([
             this.dbSignWithEmail(sEmail, sPass)
                 .then((userCredentials) => {
                     let user = userCredentials.user;
-                    this.setUserData(user, "JSON_State");
+                    this.setCurrentUserData(user,"JSON_State");
                     this.routerNavTo("home");
+                    this.dbGetDocByUid("Users", user.uid)
+                    .then((doc) => {
+                        if (doc.exists) {
+                            console.log("this user already exists");
+                        } else {
+                            console.log("this is new user");
+                            this.dbAddNewUser("Users", user);
+                        }
+                    });
                 })
                 .catch((error) => {
                     let errorCode = error.code;

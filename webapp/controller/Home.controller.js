@@ -11,6 +11,9 @@ sap.ui.define([
 
 		onInit: function () {
 			this.dbRefreshDataModel("JSON_Data", ["Appointments", "Projects"]);
+			let oPlanningCalendar = this.getView().byId("PC1");
+			oPlanningCalendar.setBuiltInViews(["Day", "Week", "Month", "One Month"]);
+			oPlanningCalendar.setViewKey("Week");
 			///////////////////////////////////////
 			///////////////////////////////////////
 			var oModel = new JSONModel();
@@ -23,31 +26,31 @@ sap.ui.define([
 						name: "Nancy Davolio",
 						role: "team member",
 						appointments: [
+							{
+								start: new Date("2022", "5", "27", "00", "00", "00"),
+								end: new Date("2022", "5", "27", "23", "59", "59"),
+								title: "Discussion of the plan",
+								info: "Online meeting",
+								type: "Type04",
+								tentative: false
+							},
 							// {
-							// 	start: new Date("2017", "0", "15", "10", "00"),
-							// 	end: new Date("2017", "0", "15", "10", "30"),
+							// 	start: new Date("2017", "0", "16", "00", "00", "00"),
+							// 	end: new Date("2017", "0", "17", "23", "59", "59"),
 							// 	title: "Discussion of the plan",
 							// 	info: "Online meeting",
 							// 	type: "Type04",
 							// 	tentative: false
 							// },
-							// {
-							// 	start: new Date("2017", "0", "17", "10", "0"),
-							// 	end: new Date("2017", "0", "17", "12", "0"),
-							// 	title: "Team meeting",
-							// 	info: "room 1",
-							// 	type: "Type01",
-							// 	pic: "sap-icon://sap-ui5",
-							// 	tentative: false
-							// },
 						],
 						headers: [
-							{
-								start: new Date("2017", "0", "12", "16", "30"),
-								end: new Date("2017", "0", "12", "18", "00"),
-								title: "Private appointment",
-								type: "Type06"
-							}
+							// {
+							// 	start: new Date("2017", "0", "12", "16", "30"),
+							// 	end: new Date("2017", "0", "12", "18", "00"),
+							// 	title: "Private appointment",
+							// 	type: "Type06"
+								
+							// }
 						]
 					},
 					{
@@ -136,18 +139,18 @@ sap.ui.define([
 			});
 		},
 
-		pressAddItemDialogAddBtn: function (sCollection, oItem) {
-			let oNameInput = this.getView().byId("AddItemDialogNameInput"),
-				sName = oNameInput.getValue(),
-				oSurnameInput = this.getView().byId("AddItemDialogSurnameInput"),
-				sSurname = oSurnameInput.getValue(),
-				oDoc = {
-					Name: sName,
-					Surname: sSurname
-				};
+		// pressAddItemDialogAddBtn: function (sCollection, oItem) {
+		// 	let oNameInput = this.getView().byId("AddItemDialogNameInput"),
+		// 		sName = oNameInput.getValue(),
+		// 		oSurnameInput = this.getView().byId("AddItemDialogSurnameInput"),
+		// 		sSurname = oSurnameInput.getValue(),
+		// 		oDoc = {
+		// 			Name: sName,
+		// 			Surname: sSurname
+		// 		};
 
-			this.dbAddDoc("shipments", oDoc);
-		},
+		// 	this.dbAddDoc("shipments", oDoc);
+		// },
 
 		pressAddItemDialogCloseBtn: function (oEvent) {
 			let dialog = this.byId("AddItemDialog");
@@ -161,7 +164,6 @@ sap.ui.define([
 			firebase.auth().signOut().then(() => {
 				console.log("pressHomeLogOutBtn: unlogged successfully");
 				this.routerNavTo("Login");
-				
 			  }).catch((error) => {
 				console.log("pressHomeLogOutBtn: error during unlog");
 			  });
