@@ -17,7 +17,7 @@ sap.ui.define([
 			///////////////////////////////////////
 			///////////////////////////////////////
 			var oModel = new JSONModel();
-			oModel.setData({
+			let JSON_PcDataOriginal = {
 				startDate: new Date("2017", "0", "15", "8", "0"),
 				people: [
 					
@@ -110,10 +110,17 @@ sap.ui.define([
 						]
 					}
 				]
+			};
+			
+			///////////////////////////////////////
+			this.pcJSONGenerator("Users").then((JSON_PcData) => {
+				//oModel.setData(JSON_PcDataOriginal);
+				oModel.setData(JSON_PcData);
+				this.getView().setModel(oModel);
 			});
-			this.getView().setModel(oModel);
 			///////////////////////////////////////
-			///////////////////////////////////////
+
+			
 
 		},
 
@@ -129,14 +136,21 @@ sap.ui.define([
 		},
 
 		pressHomePlusBtn: function () {
-			if (!this.pDialog) {
-				this.pDialog = this.loadFragment({
-					name: "sap.ui.demo.basicTemplate.view.AddItemDialog"
-				});
-			}
-			this.pDialog.then(function (oDialog) {
-				oDialog.open();
+			let oJSON_State = this.getView().getModel("JSON_State");
+			let oUser = oJSON_State.getProperty("/user");
+			let colRef = this.dbGetCollection("Appointments");
+			let query = colRef.where("creator", "==", "YXpfVtdydjObBjxiyVgVaNI2V8m2");
+			query.get().then((result) => {
+				
 			});
+			// if (!this.pDialog) {
+			// 	this.pDialog = this.loadFragment({
+			// 		name: "sap.ui.demo.basicTemplate.view.AddItemDialog"
+			// 	});
+			// }
+			// this.pDialog.then(function (oDialog) {
+			// 	oDialog.open();
+			// });
 		},
 
 		// pressAddItemDialogAddBtn: function (sCollection, oItem) {

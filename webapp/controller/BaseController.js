@@ -55,7 +55,7 @@ sap.ui.define([
             return firebase.auth().signInWithEmailAndPassword(sEmail, sPass);
         },
 
-        setCurrentUserData: function (oUser, sModelName) {
+        setCurrentUser: function (oUser, sModelName) {
             let oJSON_State = this.getView().getModel(sModelName);
             let oUserLight = {
                 uid: oUser.uid,
@@ -63,6 +63,10 @@ sap.ui.define([
                 displayName: oUser.displayName
             }
             oJSON_State.setProperty("/user", oUserLight);
+        },
+
+        getCurrentUser: function () {
+            let oJSON_State = this.getView().getModel("JSON_Stat");  
         },
 
         dbGetDocByUid: function (sCollection, sDocUid) {
@@ -81,14 +85,43 @@ sap.ui.define([
             })
         },
 
-        pcJSONGenerator: function (sCollectionName) {
-            // function pcHumanGenerator() {
+        dbQuery: function(sCollectionName) {
+            
+        },
 
-            // };
-            this.dbGetCollection(sCollectionName).then((collection) => {
-                let result = {};
-                result.startDate = new Date("2022", "6", "1", "0", "0");
+        pcJSONGenerator: function (sUsersCollectionName) {
+            let JSON_PcData = {};
+            return new Promise((resolve, reject) => {
+                this.dbGetCollection(sUsersCollectionName).get().then((oUsersCollection) => {
+                    let aUsers = this.getArrayFromCollection(oUsersCollection);
+                     
+                    let aPeople = [];
+                    let i = 0;
+
+                    
+                    let aAppointments = [{}];
+                         aAppointments[0].start = new Date("2022", "5", "27", "00", "00", "00"),
+                         aAppointments[0].end = new Date("2022", "5", "27", "23", "59", "59"),
+                         aAppointments[0].title = "Discussion of the plan",
+                         aAppointments[0].info = "Online meeting",
+                         aAppointments[0].type = "Type04",
+                         aAppointments[0].tentative = false
+                         
+                    aUsers.forEach((item, index, arr) => {
+                         aPeople[i] = {};
+                         aPeople[i].role = item.description;
+                         aPeople[i].name = item.displayName;
+                         aPeople[i].pic = item.pic;
+                         aPeople[i].appointments = aAppointments;
+                         i++;
+                    });
+                    JSON_PcData.startDate = new Date("2017", "0", "15", "8", "0");
+                    JSON_PcData.people = aPeople;
+                    resolve(JSON_PcData);
             });
+            
+            });
+            
         },
 
         ////////////////////////////
