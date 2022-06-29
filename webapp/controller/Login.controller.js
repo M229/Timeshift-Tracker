@@ -1,6 +1,7 @@
 sap.ui.define([
-    "./BaseController"
-], function (BaseController) {
+    "./BaseController",
+    "../Firebase"
+], function (BaseController, Firebase) {
     "use strict";
     return BaseController.extend("sap.ui.demo.basicTemplate.controller.Login", {
         onInit: function () {
@@ -12,17 +13,9 @@ sap.ui.define([
                 sEmail = oEmailInput.getValue(),
                 oPassInput = this.getView().byId("LoginPassInput"),
                 sPass = oPassInput.getValue();
-            this.dbSignWithEmail(sEmail, sPass)
-                .then((userCredentials) => {
-                    let user = userCredentials.user;
-                    this.setCurrentUser(user,"JSON_State");
+            Firebase.dbSignWithEmail(sEmail, sPass)
+                .then(() => {
                     this.routerNavTo("home");
-                    this.dbGetDocByUid("Users", user.uid)
-                    .then((doc) => {
-                        if (!doc.exists) {                          
-                            this.dbAddNewUser("Users", user);
-                        }
-                    });
                 });
         },
     });

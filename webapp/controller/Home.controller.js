@@ -1,8 +1,9 @@
 sap.ui.define([
 	"./BaseController",
 	"../model/formatter",
-	"sap/ui/model/json/JSONModel"
-], function (BaseController, formatter, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"../Firebase"
+], function (BaseController, formatter, JSONModel, Firebase) {
 	"use strict";
 
 	return BaseController.extend("sap.ui.demo.basicTemplate.controller.App", {
@@ -10,7 +11,7 @@ sap.ui.define([
 		formatter: formatter,
 
 		onInit: function () {
-			this.dbRefreshDataModel("JSON_Data", ["Appointments", "Projects"]);
+			this.refreshDataModel("JSON_Data", ["Appointments", "Projects"]);
 			let oPlanningCalendar = this.getView().byId("PC1");
 			oPlanningCalendar.setBuiltInViews(["Day", "Week", "Month", "One Month"]);
 			oPlanningCalendar.setViewKey("Week");
@@ -119,9 +120,6 @@ sap.ui.define([
 				this.getView().setModel(oModel);
 			});
 			///////////////////////////////////////
-
-			
-
 		},
 
 		pressTableCrossBtn: function (oEvent) {
@@ -131,17 +129,19 @@ sap.ui.define([
 				aBindingPath = sBindingPath.split("/"),
 				dPosition = +aBindingPath[aBindingPath.length - 1],
 				sId = aShipments[dPosition].id;
-			this.dbDeleteDoc("shipments", sId);
-			this.dbRefreshDataModel("JSON_Data", "shipments");
+			Firebase.dbDeleteDoc("shipments", sId);
+			this.refreshDataModel("JSON_Data", "shipments");
 		},
 
 		pressHomePlusBtn: function () {
 			let oJSON_State = this.getView().getModel("JSON_State");
 			let oUser = oJSON_State.getProperty("/user");
-			let colRef = this.dbGetCollection("Appointments");
-			let query = colRef.where("creator", "==", "YXpfVtdydjObBjxiyVgVaNI2V8m2");
-			query.get().then((result) => {
+			
 				
+			Firebase.dbQuery("Appointments", "user", "==", Firebase.dbGetCurrentUser().uid).then((result) => {
+				
+				let oUser = this.getCurrentUser();
+				let i = 0;
 			});
 			// if (!this.pDialog) {
 			// 	this.pDialog = this.loadFragment({
@@ -163,7 +163,7 @@ sap.ui.define([
 		// 			Surname: sSurname
 		// 		};
 
-		// 	this.dbAddDoc("shipments", oDoc);
+		// 	Firebase.dbAddDoc("shipments", oDoc);
 		// },
 
 		pressAddItemDialogCloseBtn: function (oEvent) {
@@ -175,7 +175,7 @@ sap.ui.define([
 
 		pressHomeLogOutBtn: function() {     
 			let oRouter = this.getOwnerComponent().getRouter();      
-			firebase.auth().signOut().then(() => {
+			Firebase.dbAuth().signOut().then(() => {
 				console.log("pressHomeLogOutBtn: unlogged successfully");
 				this.routerNavTo("Login");
 			  }).catch((error) => {
