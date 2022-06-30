@@ -11,7 +11,7 @@ sap.ui.define([
         formatter: formatter,
 
         onInit: function () {
-            
+
         },
 
         routerNavTo: function (sTargetId) {
@@ -38,6 +38,7 @@ sap.ui.define([
             let aResult = collection.docs.map((doc) => {
                 let obj = doc.data();
                 obj.id = doc.id;
+                
                 return obj
             });
             return aResult;
@@ -53,50 +54,54 @@ sap.ui.define([
             oJSON_State.setProperty("/user", oUserLight);
         },
 
-        pcJSONGenerator: function (sUsersCollectionName) {
+        pcJSONGenerator: function (sUsersColName, sAppointmentsColName, sProjectsColName) {
             let JSON_PcData = {};
             return new Promise((resolve, reject) => {
-                Firebase.dbGetCollection(sUsersCollectionName).get().then((oUsersCollection) => {
-                    let aUsers = this.getArrayFromCollection(oUsersCollection);
-
-                    let aPeople = [];
-                    let i = 0;
-
-                    let aAppointments = [{}];
-                    aAppointments[0].start = new Date("2022", "5", "27", "00", "00", "00"),
-                        aAppointments[0].end = new Date("2022", "5", "27", "23", "59", "59"),
-                        aAppointments[0].title = "Discussion of the plan",
-                        aAppointments[0].info = "Online meeting",
-                        aAppointments[0].type = "Type04",
-                        aAppointments[0].tentative = false
-
-
-
-                    aUsers.forEach((item, index, arr) => {
-                        aPeople[i] = {};
-                        aPeople[i].role = item.description;
-                        aPeople[i].name = item.displayName;
-                        aPeople[i].pic = item.pic;
-                        aPeople[i].appointments = aAppointments;
-                        i++;
-                    });
-                    JSON_PcData.startDate = new Date("2017", "0", "15", "8", "0");
-                    JSON_PcData.people = aPeople;
-                    resolve(JSON_PcData);
+                Firebase.dbGetCollection(sUsersColName).get().then((oUsersCollection) => {
                 });
-
             });
+            Promise.all([
+                Firebase.dbGetCollection(sUsersColName).get(),
+                Firebase.dbGetCollection(sAppointmentsColName).get(),
+                Firebase.dbGetCollection(sProjectsColName).get(),
+            ]).then((results) => {
+                let aUsersCol = results[0];
+                let aAppointmentsCol = results[1];
+                let aProjectsCol = results[2];
 
-        },
+                let aUsers = this.getArrayFromCollection(oUsersCollection);
 
-        ////////////////////////////
+                let aPeople = [];
+                let i = 0;
 
-        getModel: function (sName) {
-            return this.getView().getModel(sName) || this.getOwnerComponent().getModel(sName);
-        },
+                let aAppointments = [{}];
+                aAppointments[0].start = new Date("2022", "5", "27", "00", "00", "00"),
+                    aAppointments[0].end = new Date("2022", "5", "27", "23", "59", "59"),
+                    aAppointments[0].title = "Discussion of the plan",
+                    aAppointments[0].info = "Online meeting",
+                    aAppointments[0].type = "Type04",
+                    aAppointments[0].tentative = false
 
-        setModel: function (oModel, sName) {
-            return this.getView().setModel(oModel, sName);
-        }
+
+
+                aUsers.forEach((item, index, arr) => {
+                    aPeople[i] = {};
+                    aPeople[i].role = item.description;
+                    aPeople[i].name = item.displayName;
+                    aPeople[i].pic = item.pic;
+                    aPeople[i].appointments = aAppointments;
+                    i++;
+                });
+            },
+
+                ////////////////////////////
+
+                getModel: function (sName) {
+                    return this.getView().getModel(sName) || this.getOwnerComponent().getModel(sName);
+                },
+
+                setModel: function (oModel, sName) {
+                    return this.getView().setModel(oModel, sName);
+                }
     });
 });

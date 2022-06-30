@@ -78,7 +78,6 @@ sap.ui.define([
             });
         },
 
-
         dbQuery: function (sCollectionName, ...args) {
             let colRef = this.dbGetCollection(sCollectionName);
             let query = colRef.where(...args);
@@ -88,8 +87,5 @@ sap.ui.define([
         dbAuth: function () {
             return firebase.auth();
         }
-
-
-
     }
 });

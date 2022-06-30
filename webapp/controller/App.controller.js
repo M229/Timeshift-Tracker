@@ -25,21 +25,6 @@ sap.ui.define([
                         .then((doc) => {
                             this.setCurrentUser(doc.data(), "JSON_State");
                         });
-                    // Firebase.dbGetDocByUid("Users", user.uid)
-                    //     .then((doc) => {
-                    //         if (!doc.exists) {
-                    //             Firebase.dbAddNewUser("Users", user)
-                    //                 .then(() => {
-                    //                     Firebase.dbGetDocByUid("Users", user.uid).then((newDoc) => {
-                    //                         this.setCurrentUser(newDoc.data(), "JSON_State");
-                    //                         console.log(`new user ${newDoc.data().uid} has been added`);
-                    //                     });
-                    //                 });
-                    //         } else {
-                    //             this.setCurrentUser(doc.data(), "JSON_State");
-                    //             console.log("existed user has been logged");
-                    //         }
-                    //     });
                 } else {
                     console.log("no logged user -> go to Login page");
                     let oRouter = this.getOwnerComponent().getRouter();
